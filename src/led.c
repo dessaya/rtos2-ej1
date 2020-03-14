@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
 #include "led.h"
 #include "task.h"
 
@@ -10,19 +8,9 @@ void ledTask(void *param)
     TickType_t lastWakeTime = xTaskGetTickCount();
     while (1) {
         gpioWrite(taskParam->led, ON);
-
-        char *s = malloc(7);
-        if (s == NULL) {
-            // Out of memory?
-            continue;
-        }
-        strcpy(s, "LED ON");
-        xQueueSend(*taskParam->sink, &s, portMAX_DELAY);
-
+        msgQueue_send(*taskParam->sink, "LED ON");
         vTaskDelayUntil(&lastWakeTime, 500);
-
         gpioWrite(taskParam->led, OFF);
-
         vTaskDelayUntil(&lastWakeTime, 500);
     }
 }

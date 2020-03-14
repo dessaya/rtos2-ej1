@@ -2,12 +2,19 @@
 #include "btn.h"
 #include "task.h"
 
+#define MSG_SIZE 15
+
 void btnTask(void *param)
 {
     btnTaskParam_t *taskParam = param;
 
     TickType_t period =  10 / portTICK_RATE_MS;
     TickType_t lastWakeTime = xTaskGetTickCount();
+
+    char *msg = malloc(MSG_SIZE);
+    if (!msg) {
+        return;
+    }
 
     while (1) {
         while (gpioRead(taskParam->btn) == TRUE)
@@ -19,13 +26,8 @@ void btnTask(void *param)
         if (end > start) {
             TickType_t elapsed = end - start;
 
-            char *s = malloc(15);
-            if (s == NULL) {
-                // Out of memory?
-                continue;
-            }
-            snprintf(s, 15, "%s %d", taskParam->name, elapsed);
-            xQueueSend(*taskParam->sink, &s, portMAX_DELAY);
+            snprintf(msg, MSG_SIZE, "%s %d", taskParam->name, elapsed);
+            msgQueue_send(*taskParam->sink, msg);
         }
     }
 }

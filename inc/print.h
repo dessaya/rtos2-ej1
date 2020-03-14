@@ -1,12 +1,11 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#include "FreeRTOS.h"
-#include "queue.h"
+#include "msg.h"
 
 typedef struct {
-    QueueHandle_t *source;
-    QueueHandle_t *sink;
+    msgQueue_t **source;
+    msgQueue_t **sink;
 } printTaskParam_t;
 
 void printTask(void *param);
