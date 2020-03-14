@@ -9,7 +9,7 @@
 
 /*
     btnTask1 \
-    btnTask2 ---> q1 --> printTask --> freeTask
+    btnTask2 ---> q1 --> printTask --> q2 --> freeTask
     ledTask  /
 */
 
